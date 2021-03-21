@@ -1,0 +1,21 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.container{
+    width: 15rem;
+    height: 20rem;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.box{
+    height: 1rem;
+    width: 1rem;
+    border: 1px solid #ddd;
+}
+
+.player{
+    background: teal;
+}
