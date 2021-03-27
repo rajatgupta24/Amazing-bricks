@@ -1,46 +1,78 @@
-let boxes = document.querySelectorAll(".box");
-boxes = Array.from(boxes);
+const width = 10;
+const scoreT = document.querySelector(".score");
+const startBtn = document.querySelector(".start-btn");
+const boxes = document.querySelectorAll(".container div");
 
-let playerPos = 156;
-let width = 10;
+let currentPos = 0;
+let itemPos = 0;
+let snake = [2, 1, 0];
+let direction = 1;
+let score = 0;
+let speed = 0.9;
+let intervalTime = 0;
+let interval = 0;
 
-
-
-const changePlayerPos = () => {
-    for (let i=0;i<boxes.length;i++)
-        boxes[i].classList.remove("player");
-    boxes[playerPos].classList.add("player");
+function start() {
+    snake.map(i => boxes[i].classList.remove("snake"));
+    boxes[itemPos].classList.remove("apple");
+    clearInterval(interval);
+    score = 0;
+    Apple();
+    direction = 1;
+    scoreT.textContent = score;
+    intervalTime = 1000;
+    snake = [2, 1, 0];
+    currentPos = 0;
+    snake.map(i => boxes[i].classList.add("snake"));
+    interval = setInterval(move, intervalTime);
 }
 
-changePlayerPos ();
+function move() {
+    if (
+        (snake[0] + 10 >= (width*width) && direction === width) ||
+        (snake[0] % 10 === width-1 && direction === 1) ||
+        (snake[0] % 10 === 0 && direction === -1) ||
+        (snake[0] - 10 < 0 && direction === -10) ||
+        (boxes[snake[0] + direction].classList.contains("snake"))
+    ) return clearInterval(interval);
 
-for (let i=0;i<boxes.length;i++){
-    boxes[i].addEventListener("click", () => {
-        console.log(i);
-    })
+    const tail = snake.pop();
+    boxes[tail].classList.remove("snake");
+    snake.unshift(snake[0] + direction);
+
+    if (boxes[snake[0]].classList.contains("apple")) {
+        boxes[snake[0]].classList.remove("apple");
+        boxes[tail].classList.add("snake");
+        snake.push(tail);
+        score++;
+        scoreT.textContent = score;
+        clearInterval(interval);
+        intervalTime *= speed;
+        interval = setInterval(move, interval); 
+    }
+    boxes[snake[0]].classList.add("snake");
 }
 
-document.addEventListener("keydown", (e) => {
-    if (e.keyCode === 39 && (playerPos+1) % 15 !== 0) {
-        if (playerPos === 299) return;
+function Apple() {
+    do{
+        itemPos = Math.floor(Math.random() * boxes.length);
+    } while(boxes[itemPos].classList.contains('snake')) //making sure apples dont appear on the snake
+    boxes[itemPos].classList.add('apple');
+}
 
-        width = 1;
-        playerPos += width; 
-        changePlayerPos();
+function moveSnake(e) {
+    boxes[currentPos].classList.remove("snake");
+
+    if (e.keyCode == 39) {
+        direction = 1;
+    } else if (e.keyCode == 38) {
+        direction = -10;
+    } else if (e.keyCode == 37) {
+        direction = -1;
+    } else if (e.keyCode == 40) {
+        direction = 10;
     }
+}
 
-    else if (e.keyCode === 37 && playerPos % 15 !== 0 ) {
-        if (playerPos === 0) return;
-        width = -1;
-        playerPos += width; 
-        changePlayerPos();
-    }
-    // else if (e.keyCode === 38) {
-    //     if (playerPos < 15) return;
-    //     width = -15;
-    //     playerPos += width; 
-    //     changePlayerPos();
-    // }
-})
-
-
+document.addEventListener("keydown", moveSnake);
+startBtn.addEventListener("click", start);
