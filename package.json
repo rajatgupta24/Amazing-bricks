@@ -1,0 +1,23 @@
+{
+  "name": "kaboom-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rajatgupta24/kaboom-server.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rajatgupta24/kaboom-server/issues"
+  },
+  "homepage": "https://github.com/rajatgupta24/kaboom-server#readme",
+  "dependencies": {
+    "node-xlsx": "^0.21.0"
+  }
+}
